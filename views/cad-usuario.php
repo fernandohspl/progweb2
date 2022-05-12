@@ -1,8 +1,8 @@
 <?php
     require_once __DIR__ . "/../vendor/autoload.php";
 
-    use App\Models\Cliente;
-    use App\Controllers\ClienteController;
+    use App\Models\Usuario;
+    use App\Controllers\UsuarioController;
 ?>
 <!doctype html>
 <html lang="en">
@@ -34,19 +34,19 @@
     //insert into cliente (nome, telefone, email, endereco) values ('renato', '64992481630', 'renato.abreu@ifg.edu.br', 'Rua x Ny')
         if (isset($_POST['enviar'])){
 
-            $cliente = new Cliente();
-            $cliente->setNome($_POST['nome']);
-            $cliente->setTelefone($_POST['telefone']);
-            $cliente->setEmail($_POST['email']);
-            $cliente->setEndereco($_POST['endereco']);
+            $usuario = new Usuario();
+            $usuario->setNome($_POST['nome']);
+            $usuario->setTelefone($_POST['telefone']);
+            $usuario->setEmail($_POST['email']);
+            $usuario->setSenha($_POST['senha']);
 
 
             echo "Nome: " . $_POST['nome'] . "<br>";
             echo "Telefone: " . $_POST['telefone'] . "<br>";
             echo "Email: " . $_POST['email'] . "<br>";
-            echo "Endereço: " . $_POST['endereco'] . "<br>";
+            echo "Senha: " . $_POST['senha'] . "<br>";
 
-            echo ClienteController::getInstance()->inserir($cliente);
+            echo UsuarioController::getInstance()->inserir($usuario);
         }
     ?>
     <form action="#" method="post" class="col s6 offset-s3">
@@ -71,9 +71,9 @@
         </div>
         <div class="row">
             <div class="input-field col s12">
-                <i class="material-icons prefix">place</i>
-                <textarea id="textarea1" class="materialize-textarea" name="endereco"></textarea>
-                <label for="textarea1">Endereço</label>
+                <i class="material-icons prefix">lock</i>
+                <input id="senha" type="password" class="validate" name="senha">
+                <label for="senha">Senha</label>
             </div>
         </div>
         <div class="row">
