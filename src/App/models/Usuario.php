@@ -4,10 +4,12 @@ namespace App\Models;
 
 class Usuario
 {
+    private $id;
     private $nome;
     private $telefone;
     private $email;
     private $senha;
+
 
 
     /**

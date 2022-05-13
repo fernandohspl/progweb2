@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\Usuario;
+use mysql_xdevapi\Statement;
 
 class UsuarioController
 {
@@ -23,14 +24,33 @@ class UsuarioController
 
 
     public function inserir(Usuario $usuario){
-        $sql = "INSERT INTO usuario (nome, telefone, email, senha) VALUES (";
-        $sql .= "'" . $usuario->getNome()        . "', ";
-        $sql .= "'" . $usuario->getTelefone()    . "', ";
-        $sql .= "'" . $usuario->getEmail()       . "', ";
-        $sql .= "'" . $usuario->getSenha()    . "'";
-        $sql .= ")";
+        $sql = "INSERT INTO usuario (nome, telefone, email, senha) 
+                VALUES (:nome,:telefone,:email,:senha)";
+        $statement=$this->conexão->prepare($sql);
+        $statement->bindValue(":nome", $usuario->getNome());
+        $statement->bindValue(":telefone",$usuario->getTelefone());
+        $statement->bindValue("email",$usuario->getEmail());
+        $statement->bindValue(":senha",$usuario->getSenha());
 
-        $this->conexão->query($sql);
-        return $sql;
+
+
+
+        return $statement->execute();
+    }
+    public  function listar(){
+        $sql= "SELECT * FROM usuasrio ORDER  BY nome";
+        $statement =$this->conexão->query($sql,\POD::FETCH_ASSOC);
+        foreach ($statement as $row){
+           var_dump[$row];{}
+        }
+    }
+    public function  preencherUsuario($row){
+        $usuario = new  Usuario();
+        $usuario->setId($row["id"]);
+        $usuario->setNome($row["nome"]);
+        $usuario->setEmail(["email"]);
+        $usuario->setTelefone($row["telefone"]);
+
+
     }
 }
