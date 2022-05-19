@@ -38,19 +38,21 @@ class UsuarioController
         return $statement->execute();
     }
     public  function listar(){
-        $sql= "SELECT * FROM usuasrio ORDER  BY nome";
-        $statement =$this->conexão->query($sql,\POD::FETCH_ASSOC);
+        $sql= "SELECT id, nome, email, telefone FROM usuario ORDER  BY nome";
+        $statement =$this->conexão->query($sql,\PDO::FETCH_ASSOC);
+        $retorno = array();
         foreach ($statement as $row){
-           var_dump[$row];{}
+           $retorno[] = $this->preencherUsuario($row);
         }
+        return $retorno;
     }
-    public function  preencherUsuario($row){
+    private function  preencherUsuario($row){
         $usuario = new  Usuario();
         $usuario->setId($row["id"]);
         $usuario->setNome($row["nome"]);
-        $usuario->setEmail(["email"]);
+        $usuario->setEmail($row["email"]);
         $usuario->setTelefone($row["telefone"]);
-
+        return $usuario;
 
     }
 }
