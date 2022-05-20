@@ -19,11 +19,11 @@ use App\Controllers\UsuarioController;
 </head>
 <body>
 <?php
-    include_once "menu.php";
+include_once "menu.php";
 ?>
 <div class="container">
     <div class="row">
-        <h4>Cadastro de Usuário</h4>
+        <h4>Cadastro de Produto</h4>
     </div>
     <div class="row">
 
@@ -33,22 +33,22 @@ use App\Controllers\UsuarioController;
         $sucesso = false;
         if (isset($_POST['enviar'])){
 
-            $usuario = new Usuario();
-            $usuario->setNome($_POST['nome']);
-            $usuario->setTelefone($_POST['telefone']);
-            $usuario->setEmail($_POST['email']);
-            $usuario->setSenha(md5($_POST['senha']));
+            $Produto = new Produto();
+            $Produto->setNome($_POST['nome']);
+            $Produto->setdescricao($_POST['descricao']);
+            $Produto->setvalor($_POST['valor']);
+            $Produto->setimagem(md5($_POST['imagem']));
 
-            if (UsuarioController::getInstance()->inserir($usuario)){
+            if (UsuarioController::getInstance()->inserir($Produto)){
                 $sucesso = true;
             }
         }
         if($sucesso){
-        ?>
-        <div class="alert alert-primary" role="alert">
-            Usuario inserido com susseso!
-         </div>
-        <?php
+            ?>
+            <div class="alert alert-primary" role="alert">
+                Produto inserido com susseso!
+            </div>
+            <?php
         }
         ?>
         <form action="#" method="post" class="col s6 ">

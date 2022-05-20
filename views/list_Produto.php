@@ -4,8 +4,8 @@ require_once __DIR__ . "/../vendor/autoload.php";
 use App\Models\Usuario;
 use App\Controllers\UsuarioController;
 ?>
-    <!doctype html>
-    <html lang="en">
+<!doctype html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -19,7 +19,7 @@ use App\Controllers\UsuarioController;
 </head>
 <body>
 <?php
-        include_once "menu.php";
+include_once "menu.php";
 ?>
 <div class="container">
     <div class="row">
@@ -27,10 +27,10 @@ use App\Controllers\UsuarioController;
     </div>
     <div class="row">
         <?php
-            $listaUsuarios = UsuarioController:: getInstance()->listar();
+        $listaProduto = UsuarioController:: getInstance()->listar();
 
-            ?>
-        <a class="btn btn-primary" href="cad-usuario.php" role="button">Novo Usuário</a>
+        ?>
+        <a class="btn btn-primary" href="cad-Produto.php" role="button">Novo Produto</a>
         <table class="table table-hover">
             <thead>
             <tr>
@@ -42,15 +42,15 @@ use App\Controllers\UsuarioController;
             <tbody>
 
             <?php
-            foreach ($listaUsuarios as $usuario){
+            foreach ($listaProduto as $Produto){
                 echo "<tr>
-                            <td>".$usuario->getNome()."</td>
-                            <td>".$usuario->getEmail()."</td>
+                            <td>".$Produto->getNome()."</td>
+                            <td>".$Produto->getEmail()."</td>
                             <td></td>
                         </tr>";
 
             }
-?>
+            ?>
             </tbody>
         </table>
 
