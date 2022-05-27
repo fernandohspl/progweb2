@@ -4,7 +4,7 @@ namespace App\Controllers;
 require_once ".env.php";
 class Conexao{
     private  static $instance;
-    public static function getIntance(){
+    public static function getInstance(){
         if (self::$instance == null){
             $dns = DRIVER.':host=' .HOST.';dbname='.DBNAME;
             self::$instance = new \PDO($dns, USER,PASSWORD);

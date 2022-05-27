@@ -3,12 +3,12 @@
 namespace App\Controllers;
 
 use App\Models\Usuario;
-use mysql_xdevapi\Statement;
+
 
 class UsuarioController
 {
     private static $instance;
-    private $conexão;
+    private $conexao;
 
     public static function getInstance(){
 
@@ -19,17 +19,17 @@ class UsuarioController
     }
 
     private function __construct(){
-        $this->conexão = Conexao::getIntance();
+        $this->conexao = Conexao::getIntance();
     }
 
 
     public function inserir(Usuario $usuario){
         $sql = "INSERT INTO usuario (nome, telefone, email, senha) 
                 VALUES (:nome,:telefone,:email,:senha)";
-        $statement=$this->conexão->prepare($sql);
+        $statement=$this->conexao->prepare($sql);
         $statement->bindValue(":nome", $usuario->getNome());
         $statement->bindValue(":telefone",$usuario->getTelefone());
-        $statement->bindValue("email",$usuario->getEmail());
+        $statement->bindValue(":email",$usuario->getEmail());
         $statement->bindValue(":senha",$usuario->getSenha());
 
 
@@ -39,7 +39,7 @@ class UsuarioController
     }
     public  function listar(){
         $sql= "SELECT id, nome, email, telefone FROM usuario ORDER  BY nome";
-        $statement =$this->conexão->query($sql,\PDO::FETCH_ASSOC);
+        $statement =$this->conexao->query($sql,\PDO::FETCH_ASSOC);
         $retorno = array();
         foreach ($statement as $row){
            $retorno[] = $this->preencherUsuario($row);

@@ -36,7 +36,15 @@ include_once "menu.php";
             $produto->setNome($_POST['nome']);
             $produto->setDescricao($_POST['descricao']);
             $produto->setValor($_POST['valor']);
-            $produto->setImagem($_POST['imagem']);
+
+            if(isset($_FILES['imagem'])){
+                $ext = strtolower(substr($_FILES['imagem']['name'], -4));
+                $new_name = date("Y.m.d-H.i.s").$ext;
+                $dir = "./imagens/produtos/";
+                move_uploaded_file($_FILES['imagem']['tmp_name'], $dir.$new_name);
+                $produto->setImagem($new_name);
+            }
+
 
 
             if (ProdutoController::getInstance()->inserir($produto)){
@@ -52,7 +60,7 @@ include_once "menu.php";
             <?php
         }
         ?>
-        <form action="#" method="post" class="col s6 ">
+        <form action="#" method="post" class="col s6 " enctype="multipart/form-data">
             <div class="row">
                 <div class="input-field col s12">
                     <i class="material-icons prefix">account_circle</i>
@@ -80,10 +88,10 @@ include_once "menu.php";
                     <div class="file-field input-field">
                         <div class="btn black">
                             <span>Imagem</span>
-                            <input type="file" multiple name="imagem">
+                            <input type="file" name="imagem">
                         </div>
                         <div class="file-path-wrapper">
-                            <input class="file-path validate" type="text" placeholder="Upload one or more files">
+                            <input class="file-path validate" type="text">
                         </div>
                     </div>
                 </div>
