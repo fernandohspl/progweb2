@@ -19,7 +19,7 @@ class UsuarioController
     }
 
     private function __construct(){
-        $this->conexao = Conexao::getIntance();
+        $this->conexao = Conexao::getInstance();
     }
 
 
