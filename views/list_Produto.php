@@ -1,8 +1,8 @@
 <?php
 require_once __DIR__ . "/../vendor/autoload.php";
 
-use App\Models\Usuario;
-use App\Controllers\UsuarioController;
+use App\Models\Produto;
+use App\Controllers\ProdutoController;
 ?>
 <!doctype html>
 <html lang="en">
@@ -23,40 +23,86 @@ include_once "menu.php";
 ?>
 <div class="container">
     <div class="row">
-        <h4>Cadastro de Usuário</h4>
+        <h4>Cadastro de Produtos</h4>
     </div>
     <div class="row">
+
         <?php
-        $listaProduto = UsuarioController:: getInstance()->listar();
+        //singleton
+        //insert into cliente (nome, telefone, email, endereco) values ('renato', '64992481630', 'renato.abreu@ifg.edu.br', 'Rua x Ny')
+        $sucesso = false;
+        if (isset($_POST['enviar'])){
 
-        ?>
-        <a class="btn btn-primary" href="cad-Produto.php" role="button">Novo Produto</a>
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th>Nome</th>
-                <th>Email</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
+            $produto = new Produto();
+            $produto->setNome($_POST['nome']);
+            $produto->setDescricao($_POST['descricao']);
+            $produto->setValor($_POST['valor']);
+            $produto->setImagem($_POST['imagem']);
 
-            <?php
-            foreach ($listaProduto as $Produto){
-                echo "<tr>
-                            <td>".$Produto->getNome()."</td>
-                            <td>".$Produto->getEmail()."</td>
-                            <td></td>
-                        </tr>";
 
+            if (ProdutoController::getInstance()->inserir($produto)){
+                $sucesso = true;
             }
+        }
+
+        if ($sucesso) {
             ?>
-            </tbody>
-        </table>
+            <div class="alert alert-primary" role="alert">
+                Produto inserido com sucesso!
+            </div>
+            <?php
+        }
+        ?>
+        <form action="#" method="post" class="col s6 ">
+            <div class="row">
+                <div class="input-field col s12">
+                    <i class="material-icons prefix">account_circle</i>
+                    <input id="icon_prefix" type="text" class="validate" name="nome" required>
+                    <label for="icon_prefix">Nome</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <i class="material-icons prefix">description</i>
+                    <textarea id="icon_prefix" class="materialize-textarea" name="descricao" required></textarea>
+                    <label for="icon_prefix">Descricão</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <i class="material-icons prefix">price_change</i>
+                    <input id="icon_prefix" type="number" class="validate" name="valor" required>
+                    <label for="icon_prefix">Valor</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
 
-
+                    <div class="file-field input-field">
+                        <div class="btn black">
+                            <span>Imagem</span>
+                            <input type="file" multiple name="imagem">
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text" placeholder="Upload one or more files">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col col-6">
+                    <a href="list-usuario.php" class="btn waves-effect waves-light red"><i class="material-icons left">cancel</i>Cancelar</a>
+                </div>
+                <div class="col col-6">
+                    <button class="btn waves-effect waves-light" type="submit" name="enviar">Enviar
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
