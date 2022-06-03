@@ -19,8 +19,9 @@ class ProdutoController{
         $this->conexao = Conexao::getInstance();
     }
     public function excluir($produto_id){
-        /*$dir = "../../../imagens/produto/";
-        unlink($dir .)*/
+        $produto= $this->buscarProduto($produto_id);
+        $dir = __DIR__."/../../../views/imagens/produtos/";
+        unlink($dir .$produto->getImagem());
         $sql="DELETE FROM produto WHERE id = :id";
         $statement= $this->conexao->prepare($sql);
         $statement->bindValue(":id", $produto_id);
@@ -47,6 +48,20 @@ class ProdutoController{
             $lstretorno[] = $this->preencherProduto($row);
         }
         return $lstretorno;
+    }
+    public function buscarProduto($produto_id){
+        $sql = "SELECT * FROM produto WHERE  id = :id";
+        $statement= $this->conexao->prepare($sql);
+        $statement->bindValue(":id", $produto_id);
+        $statement->execute();
+        $retornoBanco= $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $produto= new Produto();
+        foreach ($retornoBanco as $row){
+            $produto=$this->preencherProduto(($row));
+        }
+
+
+        return $produto;
     }
 
     public function preencherProduto($row){
