@@ -18,6 +18,14 @@ class ProdutoController{
     private function __construct(){
         $this->conexao = Conexao::getInstance();
     }
+    public function excluir($produto_id){
+        /*$dir = "../../../imagens/produto/";
+        unlink($dir .)*/
+        $sql="DELETE FROM produto WHERE id = :id";
+        $statement= $this->conexao->prepare($sql);
+        $statement->bindValue(":id", $produto_id);
+        return $statement->execute();
+    }
 
     public function inserir(Produto $produto){
         $sql = "INSERT INTO produto (nome, descricao, valor, imagem) 

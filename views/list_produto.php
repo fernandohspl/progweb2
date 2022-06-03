@@ -3,6 +3,11 @@ require_once __DIR__ . "/../vendor/autoload.php";
 
 use App\Models\Produto;
 use App\Controllers\ProdutoController;
+$exclusao = false;
+if (isset($_GET['excluir'])){
+    if(ProdutoController::getInstance()->excluir($_GET['produto_id']))
+        $exclusao = true;
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -22,6 +27,17 @@ use App\Controllers\ProdutoController;
 include_once "menu.php";
 ?>
 <div class="container">
+    <?php
+        if($exclusao){
+        ?>
+            <div class="alert alert-danger" role="alert">
+                Produto excluído com sucesso!
+            </div>
+        <?php
+
+            }
+        ?>
+
     <div class="row">
         <h4>Cadastro de Produto</h4>
     </div>
@@ -48,7 +64,12 @@ include_once "menu.php";
                             <td><img src='./imagens/produtos/".$produto->getImagem()."' width='150px' height='150px'></td>
                             <td>".$produto->getNome()."</td>
                             <td>".$produto->getValor()."</td>
-                            <td></td>
+                            <td>
+                             <a href='list_produto.php?excluir=true&produto_id=".$produto->getId()."' class='waves-effect waves-light btn red'
+                            alt='Excluir'title='Excluir'>
+                            <span class='material-icons'>delete</span>
+                            </a>
+                            </td>
                         </tr>";
 
             }
