@@ -6,9 +6,13 @@ class Usuario
 {
     private $id;
     private $nome;
-    private $telefone;
     private $email;
     private $senha;
+    private $telefone;
+
+    public function __construct(){
+        $this->id = 0;
+    }
 
     /**
      * @return mixed
@@ -25,8 +29,6 @@ class Usuario
     {
         $this->id = $id;
     }
-
-
 
     /**
      * @return mixed
@@ -91,8 +93,6 @@ class Usuario
     {
         $this->senha = $senha;
     }
-
-
 
 
 

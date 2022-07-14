@@ -3,6 +3,12 @@ require_once __DIR__ . "/../vendor/autoload.php";
 
 use App\Models\Produto;
 use App\Controllers\ProdutoController;
+$produto = new Produto();
+if (isset($_GET['alterar'])){
+    $produto = ProdutoController::getInstance()->buscarProduto($_GET['produto_id']);
+}
+
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -28,26 +34,30 @@ include_once "menu.php";
     <div class="row">
 
         <?php
-
-        $sucesso = false;
+         $sucesso = false;
         if (isset($_POST['enviar'])){
 
-            $produto = new Produto();
+            $produto->setId($_POST['id']);
             $produto->setNome($_POST['nome']);
             $produto->setDescricao($_POST['descricao']);
             $produto->setValor($_POST['valor']);
 
             if(isset($_FILES['imagem'])){
-                $ext = strtolower(substr($_FILES['imagem']['name'], -4));
-                $new_name = date("Y.m.d-H.i.s").$ext;
-                $dir = "./imagens/produtos/";
-                move_uploaded_file($_FILES['imagem']['tmp_name'], $dir.$new_name);
-                $produto->setImagem($new_name);
+                if (!empty($_FILES['imagem']['name'])) {
+                    if ($produto->getImagem() != "") {
+                        $dir = __DIR__ . "/imagens/produtos/";
+                        unlink($dir . $produto->getImagem());
+                    }
+                    $ext = strtolower(substr($_FILES['imagem']['name'],-4)); //Pegando extensão do arquivo
+                    $new_name = date("Y.m.d-H.i.s") . $ext; //Definindo um novo nome para o arquivo
+                    $dir = './imagens/produtos/'; //Diretório para uploads
+                    move_uploaded_file($_FILES['imagem']['tmp_name'], $dir.$new_name); //Fazer upload do arquivo
+                    $produto->setImagem($new_name);
+                }
+
             }
 
-
-
-            if (ProdutoController::getInstance()->inserir($produto)){
+            if (ProdutoController::getInstance()->gravar($produto)){
                 $sucesso = true;
             }
         }
@@ -61,24 +71,26 @@ include_once "menu.php";
         }
         ?>
         <form action="#" method="post" class="col s6 " enctype="multipart/form-data">
+            <input type="hidden" name="id" value="<?php echo $produto->getId();?>">
             <div class="row">
                 <div class="input-field col s12">
                     <i class="material-icons prefix">account_circle</i>
-                    <input id="icon_prefix" type="text" class="validate" name="nome" required>
+                    <input id="icon_prefix" type="text" class="validate" name="nome"
+                           required value="<?php echo $produto->getNome();?>">
                     <label for="icon_prefix">Nome</label>
                 </div>
             </div>
             <div class="row">
                 <div class="input-field col s12">
                     <i class="material-icons prefix">description</i>
-                    <textarea id="icon_prefix" class="materialize-textarea" name="descricao" required></textarea>
+                    <textarea id="icon_prefix" class="materialize-textarea" name="descricao" required><?php echo $produto->getDescricao();?></textarea>
                     <label for="icon_prefix">Descricão</label>
                 </div>
             </div>
             <div class="row">
                 <div class="input-field col s12">
                     <i class="material-icons prefix">price_change</i>
-                    <input id="icon_prefix" type="number" class="validate" name="valor" required>
+                    <input id="icon_prefix" type="number" class="validate" name="valor" required value="<?php echo $produto->getValor();?>">
                     <label for="icon_prefix">Valor</label>
                 </div>
             </div>
@@ -88,10 +100,10 @@ include_once "menu.php";
                     <div class="file-field input-field">
                         <div class="btn black">
                             <span>Imagem</span>
-                            <input type="file" name="imagem">
+                            <input type="file" multiple name="imagem">
                         </div>
                         <div class="file-path-wrapper">
-                            <input class="file-path validate" type="text">
+                            <input class="file-path validate" type="text" placeholder="Upload one or more files">
                         </div>
                     </div>
                 </div>
