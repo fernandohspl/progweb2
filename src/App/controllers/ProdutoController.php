@@ -92,7 +92,21 @@ class ProdutoController{
         }
         return $lstretorno;
     }
+    public function listarPorCategoria($categoria_id){
+        $sql = "SELECT * FROM produtos WHERE categoria_id = :categoria_id";
+        $statement = $this->conexao->prepare($sql);
+        $statement->bindValue(":categoria_id", $categoria_id);
+        $statement->execute();
+        $resultadoConsulta = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
+        $resultado = [];
+
+        foreach ($resultadoConsulta as $row){
+            $resultado[] = $this->preencherProduto($row);
+        }
+
+        return $resultado;
+    }
     public function preencherProduto($row){
         $produto = new Produto();
         $produto->setId($row["id"]);
